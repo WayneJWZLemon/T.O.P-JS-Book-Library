@@ -72,7 +72,6 @@ function loginRender() {
   document.body.appendChild(newSec);
 }
 
-document.getElementById("signInBtn").addEventListener("click", signIn);
 
 function writeUserData(userId, bookName, author, numPage, status) {
   const db = getDatabase();
@@ -84,8 +83,17 @@ function writeUserData(userId, bookName, author, numPage, status) {
   });
 }
 
+
 function readUserData() {
-  
+  currentBook.author = String(document.getElementById("authorinput").value);
+  currentBook.title = String(document.getElementById("titleinput").value);
+  currentBook.numPages = String(document.getElementById("pageinput").value);
+  if(document.getElementById("readstatus").checked) {
+    currentBook.status = "readed";
+  }
+  // console.dir(currentBook);
+  writeUserData(auth.currentUser.userId, currentBook.title, currentBook.author, currentBook.numPages, currentBook.status);
+  console.log("Preceeds after the write function.");
 }
 
 
@@ -94,15 +102,22 @@ function readUserData() {
 //----------------Book Library Functions----------------
 let myLibrary = [];
 
-function Book(author, title, numPages, status) {
-  this.author = author;
-  this.title = title;
-  this.numPages = numPages;
-  this.status = status;
+class Book {
+  constructor(author, title, numPages, status) {
+    this.author = author;
+    this.title = title;
+    this.numPages = numPages;
+    this.status = status;
+  }
 }
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
 }
 
+document.getElementById("signInBtn").addEventListener("click", signIn);
+
+document.getElementById("submitBtn").addEventListener("mouseover", readUserData);
+
+let currentBook = new Book();
 
