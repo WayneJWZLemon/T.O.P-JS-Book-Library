@@ -89,7 +89,7 @@ function readUserData() {
   currentBook.title = String(document.getElementById("titleinput").value);
   currentBook.numPages = String(document.getElementById("pageinput").value);
   if(document.getElementById("readstatus").checked) {
-    currentBook.status = "readed";
+    currentBook.status = "read";
   }
   // console.dir(currentBook);
   writeUserData(auth.currentUser.userId, currentBook.title, currentBook.author, currentBook.numPages, currentBook.status);
@@ -97,10 +97,42 @@ function readUserData() {
 }
 
 
+function RenderCard() {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  card.style.width = "18rem";
 
+  const cardBody = document.createElement("div");
+  cardBody.classList.add("card-body");
 
-//----------------Book Library Functions----------------
-let myLibrary = [];
+  const bookName = document.createElement("h5");
+  bookName.classList.add("card-title");
+  bookName.innerText = String(document.getElementById("titleinput").value);
+
+  const listGroup = document.createElement("ul");
+  listGroup.classList.add("list-group", "list-group-flush");
+
+  const authorName = document.createElement("li");
+  authorName.classList.add("list-group-item");
+  authorName.innerText = String(document.getElementById("authorinput").value);
+
+  const pageNumber = document.createElement("li");
+  pageNumber.classList.add("list-group-item");
+  pageNumber.innerText = String(document.getElementById("pageinput").value);
+
+  const readStatus = document.createElement("li");
+  readStatus.classList.add("list-group-item");
+  if(document.getElementById("readstatus").checked) {
+    readStatus.innerHTML = "read";
+  } else {
+    readStatus.innerText = "not read";
+  }
+
+  listGroup.append(authorName, pageNumber, readStatus);
+  cardBody.append(bookName);
+  card.append(cardBody, listGroup);
+  document.getElementById("cardRenderArea").appendChild(card);
+}
 
 class Book {
   constructor(author, title, numPages, status) {
@@ -111,13 +143,10 @@ class Book {
   }
 }
 
-function addBookToLibrary(book) {
-  myLibrary.push(book);
-}
 
 document.getElementById("signInBtn").addEventListener("click", signIn);
 
-document.getElementById("submitBtn").addEventListener("mouseover", readUserData);
+// document.getElementById("submitBtn").addEventListener("mouseover", readUserData);
+document.getElementById("submitBtn").addEventListener("click", RenderCard);
 
 let currentBook = new Book();
-
