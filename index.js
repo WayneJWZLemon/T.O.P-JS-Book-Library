@@ -1,5 +1,4 @@
 //---------------Firebase--------------------
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
 import {
@@ -8,13 +7,6 @@ import {
   GoogleAuthProvider,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-// TODO: Add SDKs for Firebase products that you want to use
-
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKMQ9ATQVJhUKCE823Ie5Kane9TAU87qU",
@@ -66,16 +58,13 @@ function loginRender() {
   newDiv.classList.add("bg-secondary");
   newDiv.setAttribute("id", "login-user-div");
   newDiv.classList.add("mt-1");
-
-  //Creating input fields for the user to submit information about the book
   
   document.body.appendChild(newSec);
 }
 
 
 function writeUserData(userId, bookName, author, numPage, status) {
-  const db = getDatabase();
-  set(ref(db, 'users/' + userId), {
+  set(ref(database, 'users/' + userId), {
     bookName: bookName,
     author: author,
     numPage : numPage,

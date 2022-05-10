@@ -1,9 +1,10 @@
 # T.O.P-JS-Book-Library
-Adapated from the Odin Project | Javascript Lession Project: Library
+Adapted from the Odin Project | Javascript Lesson Project: Library (in progress)
 
-Decided to use Bootstrap to avoid worrying about formatting the page
+**I decided to use this project to practice my skills using Bootstrap and Firebase.**
 
 General Features:
 * Simple login interface using Google API
 * Allowing users to input book information
 * Storing user data using Firebase
+* Retrieve all book data when the user signs in and display them on the web page
