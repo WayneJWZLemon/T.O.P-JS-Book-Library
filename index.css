@@ -1,0 +1,13 @@
+body {
+  background: linear-gradient(
+      217deg,
+      rgba(248, 244, 166, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(177, 228, 247, 0.8), rgba(184, 243, 174, 0) 70.71%),
+    linear-gradient(336deg, rgba(240, 165, 229, 0.611), rgba(0, 0, 255, 0) 70.71%);
+}
+
+.card {
+  display: inline-block;
+}

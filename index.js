@@ -6,7 +6,12 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKMQ9ATQVJhUKCE823Ie5Kane9TAU87qU",
@@ -23,68 +28,64 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-function signIn() {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider).then((result) => {
-    const inOutBtn = document.getElementById("signInBtn");
-    inOutBtn.textContent = "Sign Out";
-    loginRender();
-    const loginUserDiv = document.getElementById("login-user-div");
-    const userWelcomeMsg = document.createElement("p");
-    userWelcomeMsg.textContent = "Hello " + auth.currentUser.displayName;
-    const userInstruction = document.createElement("p");
-    userInstruction.textContent = "Click on the add button to populate the library";
-    loginUserDiv.appendChild(userWelcomeMsg);
-    loginUserDiv.appendChild(userInstruction);
-  });
-}
-
 function loginRender() {
-  //Generate the buttons
-  const addBookBtn = document.createElement("button");
-  addBookBtn.setAttribute("type", "button");
-  addBookBtn.classList.add("btn");
-  addBookBtn.classList.add("btn-success")
-  addBookBtn.classList.add("mt-2");
-  addBookBtn.textContent = "Add Book";
   //Rendering the user information
   const newSec = document.createElement("section");
   const newDiv = document.createElement("div");
   newSec.appendChild(newDiv);
-  newSec.appendChild(addBookBtn);
   newSec.classList.add("text-center");
-  newSec.classList.add("text-light");
-  newDiv.classList.add("container-fluid");
-  newDiv.classList.add("bg-secondary");
+  newSec.classList.add("text-dark");
+  newDiv.classList.add("container-fluid", "alert", "alert-success");
   newDiv.setAttribute("id", "login-user-div");
   newDiv.classList.add("mt-1");
-  
-  document.body.appendChild(newSec);
+  document.body.insertBefore(newSec, document.getElementById("inputGroup"));
 }
 
+function signIn() {
+  const inOutBtn = document.getElementById("signInBtn");
+  if (inOutBtn.innerText === "Sign-In with Google") {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider).then((result) => {
+      inOutBtn.textContent = "Sign Out";
+      loginRender();
+      const loginUserDiv = document.getElementById("login-user-div");
+      const userWelcomeMsg = document.createElement("p");
+      userWelcomeMsg.textContent = "Hello " + auth.currentUser.displayName;
+      loginUserDiv.appendChild(userWelcomeMsg);
+    });
+  }
+  else {
+    auth.signOut();
+    inOutBtn.textContent = "Sign-In with Google";
+  }
+}
 
 function writeUserData(userId, bookName, author, numPage, status) {
-  set(ref(database, 'users/' + userId), {
+  set(ref(database, "users/" + userId), {
     bookName: bookName,
     author: author,
-    numPage : numPage,
-    status: status
+    numPage: numPage,
+    status: status,
   });
 }
-
 
 function readUserData() {
   currentBook.author = String(document.getElementById("authorinput").value);
   currentBook.title = String(document.getElementById("titleinput").value);
   currentBook.numPages = String(document.getElementById("pageinput").value);
-  if(document.getElementById("readstatus").checked) {
+  if (document.getElementById("readstatus").checked) {
     currentBook.status = "read";
   }
   // console.dir(currentBook);
-  writeUserData(auth.currentUser.userId, currentBook.title, currentBook.author, currentBook.numPages, currentBook.status);
+  writeUserData(
+    auth.currentUser.userId,
+    currentBook.title,
+    currentBook.author,
+    currentBook.numPages,
+    currentBook.status
+  );
   console.log("Preceeds after the write function.");
 }
-
 
 function RenderCard() {
   const card = document.createElement("div");
@@ -94,27 +95,30 @@ function RenderCard() {
   const cardBody = document.createElement("div");
   cardBody.classList.add("card-body");
 
-  const bookName = document.createElement("h5");
-  bookName.classList.add("card-title");
-  bookName.innerText = String(document.getElementById("titleinput").value);
+  const bookName = document.createElement("p");
+  bookName.classList.add("card-title", "fw-semibold", "text-dark");
+  bookName.innerText = "BOOK TITLE: " + String(document.getElementById("titleinput").value);
 
   const listGroup = document.createElement("ul");
   listGroup.classList.add("list-group", "list-group-flush");
 
   const authorName = document.createElement("li");
-  authorName.classList.add("list-group-item");
-  authorName.innerText = String(document.getElementById("authorinput").value);
+  authorName.classList.add("list-group-item", "text-dark", "bg-danger");
+  authorName.style = "--bs-bg-opacity: .5;";
+  authorName.innerText = "AUTHOR: " + String(document.getElementById("authorinput").value);
 
   const pageNumber = document.createElement("li");
-  pageNumber.classList.add("list-group-item");
-  pageNumber.innerText = String(document.getElementById("pageinput").value);
+  pageNumber.classList.add("list-group-item", "text-dark", "bg-warning");
+  pageNumber.style = "--bs-bg-opacity: .5;";
+  pageNumber.innerText = "# OF PAGES: " + String(document.getElementById("pageinput").value);
 
   const readStatus = document.createElement("li");
-  readStatus.classList.add("list-group-item");
-  if(document.getElementById("readstatus").checked) {
-    readStatus.innerHTML = "read";
+  readStatus.classList.add("list-group-item", "text-dark", "bg-info");
+  readStatus.style = "--bs-bg-opacity: .5;";
+  if (document.getElementById("readstatus").checked) {
+    readStatus.innerHTML = "STATUS: read";
   } else {
-    readStatus.innerText = "not read";
+    readStatus.innerText = "STATUS: not read";
   }
 
   listGroup.append(authorName, pageNumber, readStatus);
@@ -131,7 +135,6 @@ class Book {
     this.status = status;
   }
 }
-
 
 document.getElementById("signInBtn").addEventListener("click", signIn);
 
