@@ -75,16 +75,21 @@ function readUserData() {
   currentBook.numPages = String(document.getElementById("pageinput").value);
   if (document.getElementById("readstatus").checked) {
     currentBook.status = "read";
+  } else {
+    currentBook.status = "not read";
   }
   // console.dir(currentBook);
-  writeUserData(
-    auth.currentUser.userId,
-    currentBook.title,
-    currentBook.author,
-    currentBook.numPages,
-    currentBook.status
-  );
-  console.log("Preceeds after the write function.");
+  if(auth.currentUser != null) {
+    writeUserData(
+      auth.currentUser.uid,
+      currentBook.title,
+      currentBook.author,
+      currentBook.numPages,
+      currentBook.status
+    );
+  } else {
+    console.log("You are not signed in.");
+  }
 }
 
 function RenderCard() {
@@ -137,8 +142,7 @@ class Book {
 }
 
 document.getElementById("signInBtn").addEventListener("click", signIn);
-
-// document.getElementById("submitBtn").addEventListener("mouseover", readUserData);
 document.getElementById("submitBtn").addEventListener("click", RenderCard);
+document.getElementById("submitBtn").addEventListener("click", readUserData);
 
 let currentBook = new Book();

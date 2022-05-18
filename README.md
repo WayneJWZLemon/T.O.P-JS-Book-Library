@@ -1,7 +1,7 @@
 # T.O.P-JS-Book-Library
 Adapted from the Odin Project | Javascript Lesson Project: Library (in progress)
 
-**I decided to use this project to practice my skills using Bootstrap and Firebase.**
+**I decided to use this project to practice my skills in Bootstrap and Firebase.**
 
 General Features:
 * Simple login interface using Google API
