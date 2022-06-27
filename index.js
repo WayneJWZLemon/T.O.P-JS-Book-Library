@@ -70,6 +70,7 @@ function writeUserData(userId, bookName, author, numPage, status) {
 }
 
 function readUserData() {
+  let currentBook = new Book();
   currentBook.author = String(document.getElementById("authorinput").value);
   currentBook.title = String(document.getElementById("titleinput").value);
   currentBook.numPages = String(document.getElementById("pageinput").value);
@@ -78,8 +79,7 @@ function readUserData() {
   } else {
     currentBook.status = "not read";
   }
-  // console.dir(currentBook);
-  if(auth.currentUser != null) {
+  if(auth.currentUser !== null) {
     writeUserData(
       auth.currentUser.uid,
       currentBook.title,
@@ -88,7 +88,7 @@ function readUserData() {
       currentBook.status
     );
   } else {
-    console.log("You are not signed in.");
+    saveLocally();
   }
 }
 
@@ -141,8 +141,26 @@ class Book {
   }
 }
 
+function saveLocally() {
+  let currentBook = new Book();
+  currentBook.author = String(document.getElementById("authorinput").value);
+  currentBook.title = String(document.getElementById("titleinput").value);
+  currentBook.numPages = String(document.getElementById("pageinput").value);
+  if (document.getElementById("readstatus").checked) {
+    currentBook.status = "read";
+  } else {
+    currentBook.status = "not read";
+  }
+  localStorage.setItem(currentBook.title+currentBook.author, JSON.stringify(currentBook));
+  $(document).ready(function() {
+      $("body").append("<div class='alert alert-success centerInPage'>Saved to local storage.</div>")
+      $(".centerInPage").fadeOut(3000, function() {
+        $(this).remove();
+      })
+  });
+}
+
+
 document.getElementById("signInBtn").addEventListener("click", signIn);
 document.getElementById("submitBtn").addEventListener("click", RenderCard);
 document.getElementById("submitBtn").addEventListener("click", readUserData);
-
-let currentBook = new Book();
